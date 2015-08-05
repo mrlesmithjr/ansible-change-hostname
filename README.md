@@ -13,6 +13,7 @@ Role Variables
 
 ````
 reboot: true  #defines if the node should reboot after changing the hostname
+````
 
 Dependencies
 ------------
