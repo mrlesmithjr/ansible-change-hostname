@@ -1,7 +1,9 @@
 ---
 # tasks file for ansible-change-hostname
 - name: main | changing hostname to match inventory_hostname
-  hostname: name={{ inventory_hostname }}
+  hostname:
+    name: "{{ inventory_hostname }}"
+  register: hostname_status
   when: ansible_hostname != "{{ inventory_hostname }}"
 
 - name: main | restarting machine
@@ -9,9 +11,9 @@
   async: 0
   poll: 0
   ignore_errors: true
-  when: reboot and ansible_hostname != "{{ inventory_hostname }}"
+  when: (reboot is defined and reboot ) and hostname_status.changed
 
 - name: main | waiting for server to come back
   local_action: wait_for port=22 host="{{ ansible_ssh_host  | default(inventory_hostname) }}" search_regex=OpenSSH delay=10
   sudo: false
-  when: reboot and ansible_hostname != "{{ inventory_hostname }}"
+  when: (reboot is defined and reboot ) and hostname_status.changed
