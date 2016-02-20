@@ -1,6 +1,6 @@
 ---
 # tasks file for ansible-change-hostname
-- name: main | changing hostname to match inventory_hostname
+- name: main | changing hostname to match inventory_hostname_short
   hostname:
     name: "{{ inventory_hostname_short }}"
   register: hostname_status
