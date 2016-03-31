@@ -7,13 +7,24 @@
   when: ansible_hostname != "{{ inventory_hostname_short }}"
 
 - name: main | restarting machine
-  command: shutdown -r now "rebooting to complete hostname change"
+  shell: shutdown -r now "rebooting to complete hostname change"
   async: 0
   poll: 0
   ignore_errors: true
-  when: (reboot is defined and reboot ) and hostname_status.changed
+  when: >
+        (change_hostname_reboot is defined and
+        change_hostname_reboot ) and
+        hostname_status.changed
 
 - name: main | waiting for server to come back
-  local_action: wait_for port=22 host="{{ ansible_ssh_host  | default(inventory_hostname) }}" search_regex=OpenSSH delay=10
+  local_action:
+    wait_for:
+      port: 22
+      host: "{{ ansible_ssh_host  | default(inventory_hostname) }}"
+      search_regex: OpenSSH
+      delay: 10
   sudo: false
-  when: (reboot is defined and reboot ) and hostname_status.changed
+  when: >
+        (change_hostname_reboot is defined and
+        change_hostname_reboot ) and
+        hostname_status.changed
