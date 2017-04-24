@@ -3,6 +3,11 @@ Role Name
 
 Changes the hostname on a node to match the inventory hostname.
 
+Build Status
+------------
+
+[![Build Status](https://travis-ci.org/mrlesmithjr/ansible-change-hostname.svg?branch=master)](https://travis-ci.org/mrlesmithjr/ansible-change-hostname)
+
 Requirements
 ------------
 
